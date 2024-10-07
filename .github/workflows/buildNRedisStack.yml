@@ -1,38 +1,7 @@
 name: Available tests in output binaries
 
 on:
-  schedule:
-    - cron: '0 0 * * *'
   workflow_dispatch:
-      inputs:
-        branch:
-          description: 'Branch to run tests on'
-          required: true
-          default: 'main'
-        repo:
-          description: 'Repository to run tests on'
-          required: true
-          default: 'redis/NRedisStack'
-        rs_version:
-          description: 'Redis Enterprise version'
-          required: true
-          default: '100.0.0'
-        rs_build:
-          description: 'Redis Enterprise build'
-          required: true
-          default: '3530'
-        public_ssh_key:
-          description: 'Public SSH key'
-          required: true
-          default: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5qa+eD1txZGnJvnk4tgdMrl7IAZsd0jk1kxWzIhPpT8cAOwVJvBh588VV+a1WLFsqjNkNXHiK6z/7mF51GgvM97HppFg7psf2TEUPeBTsZAVJNG96llXSdbZqIc+Bha/q3+OAMWzeouDABzUM7FEmy6Qhl+FgQ24LeuQmZdN6IsSf2pyPrr32qhhdx2qJKUyoqL1YF9q8qpNIXCQaBR/CZx4jR2vk8oHfYJ4s0DNTlpFzdjOn5Xi/APeLb6BRR1DcaTdLgxUYkK2lTzRvVK8faZIw+eWS8DR3/sH/irVPHodjzPCEPQH3lWDK5tzryb8f1vM0BvyycgAEAXI/Jdwl client'
-        env_ttl_hours:
-          description: 'Environment TTL in hours'
-          required: true
-          default: '2'
-        pr_number:
-          description: 'PR number'
-          required: false
-
 
 jobs:
   enterprise-tests:
