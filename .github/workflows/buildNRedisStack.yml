@@ -1,0 +1,91 @@
+name: Available tests in output binaries
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+      inputs:
+        branch:
+          description: 'Branch to run tests on'
+          required: true
+          default: 'main'
+        repo:
+          description: 'Repository to run tests on'
+          required: true
+          default: 'redis/NRedisStack'
+        rs_version:
+          description: 'Redis Enterprise version'
+          required: true
+          default: '100.0.0'
+        rs_build:
+          description: 'Redis Enterprise build'
+          required: true
+          default: '3530'
+        public_ssh_key:
+          description: 'Public SSH key'
+          required: true
+          default: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5qa+eD1txZGnJvnk4tgdMrl7IAZsd0jk1kxWzIhPpT8cAOwVJvBh588VV+a1WLFsqjNkNXHiK6z/7mF51GgvM97HppFg7psf2TEUPeBTsZAVJNG96llXSdbZqIc+Bha/q3+OAMWzeouDABzUM7FEmy6Qhl+FgQ24LeuQmZdN6IsSf2pyPrr32qhhdx2qJKUyoqL1YF9q8qpNIXCQaBR/CZx4jR2vk8oHfYJ4s0DNTlpFzdjOn5Xi/APeLb6BRR1DcaTdLgxUYkK2lTzRvVK8faZIw+eWS8DR3/sH/irVPHodjzPCEPQH3lWDK5tzryb8f1vM0BvyycgAEAXI/Jdwl client'
+        env_ttl_hours:
+          description: 'Environment TTL in hours'
+          required: true
+          default: '2'
+        pr_number:
+          description: 'PR number'
+          required: false
+
+
+jobs:
+  enterprise-tests:
+    name: Build host
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Clone client
+        uses: actions/checkout@v4
+        with:
+          repository: atakavci/NRedisStack
+          ref: ali/tba-int
+          path: client_src
+
+      - name: Copy file to working directory
+        run: |
+          cp config/endpoints.json $(pwd)/endpoints.json
+        shell: bash
+          
+      - name: Set env variables for tests
+        run: |
+          echo "REDIS_ENDPOINTS_CONFIG_PATH=$(pwd)/endpoints.json" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Dump env variables
+        run: |
+          echo "${REDIS_ENDPOINTS_CONFIG_PATH}"
+          cat "${REDIS_ENDPOINTS_CONFIG_PATH}"
+        shell: bash
+
+      - name: .NET Core 8
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        working-directory: client_src
+        run: dotnet restore
+
+      - name: Build
+        working-directory: client_src
+        run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true
+
+      - name: List of Tests
+        working-directory: client_src
+        run: dotnet test --list-tests
+        
+      - name: Test
+        working-directory: client_src
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        run: dotnet test -f net8.0 --no-build --verbosity detailed --filter AuthenticationTests
