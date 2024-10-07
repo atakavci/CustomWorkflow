@@ -1,0 +1,232 @@
+{
+    "cloud_provider": {
+        "sensitive": false,
+        "type": "string",
+        "value": "azure"
+    },
+    "cluster_name": {
+        "sensitive": false,
+        "type": "string",
+        "value": "ali-tba-tests-68272922.cto.redislabs.com"
+    },
+    "instance_ids": {
+        "sensitive": false,
+        "type": [
+            "tuple",
+            [
+                "string",
+                "string",
+                "string"
+            ]
+        ],
+        "value": [
+            "/subscriptions/f0aad62b-d0b6-4d6f-b816-620cc17037ca/resourceGroups/ali-tba-tests-68272922/providers/Microsoft.Compute/virtualMachines/node1.ali-tba-tests-68272922.cto.redislabs.com",
+            "/subscriptions/f0aad62b-d0b6-4d6f-b816-620cc17037ca/resourceGroups/ali-tba-tests-68272922/providers/Microsoft.Compute/virtualMachines/node2.ali-tba-tests-68272922.cto.redislabs.com",
+            "/subscriptions/f0aad62b-d0b6-4d6f-b816-620cc17037ca/resourceGroups/ali-tba-tests-68272922/providers/Microsoft.Compute/virtualMachines/node3.ali-tba-tests-68272922.cto.redislabs.com"
+        ]
+    },
+    "instance_type": {
+        "sensitive": false,
+        "type": "string",
+        "value": "Standard_D2_v4"
+    },
+    "nodes": {
+        "sensitive": false,
+        "type": [
+            "map",
+            [
+                "object",
+                {
+                    "availability_zone": "dynamic",
+                    "enable_fips": "string",
+                    "instance_id": "string",
+                    "instance_type": "string",
+                    "os": "string",
+                    "private_ip": "string",
+                    "public_ip": "string",
+                    "ssh_user": "string"
+                }
+            ]
+        ],
+        "value": {
+            "1": {
+                "availability_zone": null,
+                "enable_fips": "false",
+                "instance_id": "/subscriptions/f0aad62b-d0b6-4d6f-b816-620cc17037ca/resourceGroups/ali-tba-tests-68272922/providers/Microsoft.Compute/virtualMachines/node1.ali-tba-tests-68272922.cto.redislabs.com",
+                "instance_type": "Standard_D2_v4",
+                "os": "mariner",
+                "private_ip": "10.0.1.6",
+                "public_ip": "40.118.64.233",
+                "ssh_user": "mariner"
+            },
+            "2": {
+                "availability_zone": null,
+                "enable_fips": "false",
+                "instance_id": "/subscriptions/f0aad62b-d0b6-4d6f-b816-620cc17037ca/resourceGroups/ali-tba-tests-68272922/providers/Microsoft.Compute/virtualMachines/node2.ali-tba-tests-68272922.cto.redislabs.com",
+                "instance_type": "Standard_D2_v4",
+                "os": "mariner",
+                "private_ip": "10.0.1.4",
+                "public_ip": "40.118.64.232",
+                "ssh_user": "mariner"
+            },
+            "3": {
+                "availability_zone": null,
+                "enable_fips": "false",
+                "instance_id": "/subscriptions/f0aad62b-d0b6-4d6f-b816-620cc17037ca/resourceGroups/ali-tba-tests-68272922/providers/Microsoft.Compute/virtualMachines/node3.ali-tba-tests-68272922.cto.redislabs.com",
+                "instance_type": "Standard_D2_v4",
+                "os": "mariner",
+                "private_ip": "10.0.1.5",
+                "public_ip": "52.232.46.176",
+                "ssh_user": "mariner"
+            }
+        }
+    },
+    "nodes_spec": {
+        "sensitive": false,
+        "type": [
+            "object",
+            {
+                "1": [
+                    "object",
+                    {
+                        "availability_zone": "dynamic",
+                        "enable_fips": "string",
+                        "instance_type": "string",
+                        "offer": "string",
+                        "os": "string",
+                        "publisher": "string",
+                        "rs_build": "string",
+                        "rs_version": "string",
+                        "sku": "string",
+                        "ssh_user": "string"
+                    }
+                ],
+                "2": [
+                    "object",
+                    {
+                        "availability_zone": "dynamic",
+                        "enable_fips": "string",
+                        "instance_type": "string",
+                        "offer": "string",
+                        "os": "string",
+                        "publisher": "string",
+                        "rs_build": "string",
+                        "rs_version": "string",
+                        "sku": "string",
+                        "ssh_user": "string"
+                    }
+                ],
+                "3": [
+                    "object",
+                    {
+                        "availability_zone": "dynamic",
+                        "enable_fips": "string",
+                        "instance_type": "string",
+                        "offer": "string",
+                        "os": "string",
+                        "publisher": "string",
+                        "rs_build": "string",
+                        "rs_version": "string",
+                        "sku": "string",
+                        "ssh_user": "string"
+                    }
+                ]
+            }
+        ],
+        "value": {
+            "1": {
+                "availability_zone": null,
+                "enable_fips": "false",
+                "instance_type": "Standard_D2_v4",
+                "offer": "cbl-mariner",
+                "os": "mariner",
+                "publisher": "MicrosoftCBLMariner",
+                "rs_build": "3530",
+                "rs_version": "100.0.0",
+                "sku": "cbl-mariner-2-gen2-fips",
+                "ssh_user": "mariner"
+            },
+            "2": {
+                "availability_zone": null,
+                "enable_fips": "false",
+                "instance_type": "Standard_D2_v4",
+                "offer": "cbl-mariner",
+                "os": "mariner",
+                "publisher": "MicrosoftCBLMariner",
+                "rs_build": "3530",
+                "rs_version": "100.0.0",
+                "sku": "cbl-mariner-2-gen2-fips",
+                "ssh_user": "mariner"
+            },
+            "3": {
+                "availability_zone": null,
+                "enable_fips": "false",
+                "instance_type": "Standard_D2_v4",
+                "offer": "cbl-mariner",
+                "os": "mariner",
+                "publisher": "MicrosoftCBLMariner",
+                "rs_build": "3530",
+                "rs_version": "100.0.0",
+                "sku": "cbl-mariner-2-gen2-fips",
+                "ssh_user": "mariner"
+            }
+        }
+    },
+    "os": {
+        "sensitive": false,
+        "type": "string",
+        "value": "mariner"
+    },
+    "password": {
+        "sensitive": false,
+        "type": "string",
+        "value": "test123"
+    },
+    "private_ips": {
+        "sensitive": false,
+        "type": [
+            "tuple",
+            [
+                "string",
+                "string",
+                "string"
+            ]
+        ],
+        "value": [
+            "10.0.1.6",
+            "10.0.1.4",
+            "10.0.1.5"
+        ]
+    },
+    "public_ips": {
+        "sensitive": false,
+        "type": [
+            "tuple",
+            [
+                "string",
+                "string",
+                "string"
+            ]
+        ],
+        "value": [
+            "40.118.64.233",
+            "40.118.64.232",
+            "52.232.46.176"
+        ]
+    },
+    "region": {
+        "sensitive": false,
+        "type": "string",
+        "value": "West Europe"
+    },
+    "ssh_user": {
+        "sensitive": false,
+        "type": "string",
+        "value": "mariner"
+    },
+    "username": {
+        "sensitive": false,
+        "type": "string",
+        "value": "test@redis.com"
+    }
+}
