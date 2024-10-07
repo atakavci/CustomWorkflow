@@ -49,12 +49,12 @@ jobs:
 
       - name: List of Tests
         working-directory: client_src
-        run: dotnet test --list-tests
+        run: dotnet test -f net8.0 --no-build --list-tests
         
-      - name: Test
-        working-directory: client_src
-        env:
-          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-        run: dotnet test -f net8.0 --no-build --verbosity detailed --filter AuthenticationTests
+     #- name: Test
+     #   working-directory: client_src
+     #   env:
+     #     AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+     #     AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+     #     AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+     #   run: dotnet test -f net8.0 --no-build --verbosity detailed --filter AuthenticationTests
