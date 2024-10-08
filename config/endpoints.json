@@ -35,7 +35,7 @@
                     "51.137.215.248"
                 ],
                 "addr_type": "external",
-                "dns_name": "redis-12001.nredisstack-tests-4e0bd781.cto.redislabs.com",
+                "dns_name": "redis-10268.ali-tba-tests-68272922.cto.redislabs.com",
                 "oss_cluster_api_preferred_endpoint_type": "ip",
                 "oss_cluster_api_preferred_ip_type": "internal",
                 "port": 12001,
