@@ -1,0 +1,126 @@
+name: NRedisStack EntraID Scenario Tests
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+      inputs:
+        branch:
+          description: 'Branch to run tests on'
+          required: true
+          default: 'main'
+        repo:
+            description: 'Repository to run tests on'
+            required: true
+            default: 'redis/NRedisStack'
+        rs_version:
+            description: 'Redis Enterprise version'
+            required: true
+            default: '100.0.0'
+        rs_build:
+            description: 'Redis Enterprise build'
+            required: true
+            default: '3530'
+        public_ssh_key:
+            description: 'Public SSH key'
+            required: true
+            default: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5qa+eD1txZGnJvnk4tgdMrl7IAZsd0jk1kxWzIhPpT8cAOwVJvBh588VV+a1WLFsqjNkNXHiK6z/7mF51GgvM97HppFg7psf2TEUPeBTsZAVJNG96llXSdbZqIc+Bha/q3+OAMWzeouDABzUM7FEmy6Qhl+FgQ24LeuQmZdN6IsSf2pyPrr32qhhdx2qJKUyoqL1YF9q8qpNIXCQaBR/CZx4jR2vk8oHfYJ4s0DNTlpFzdjOn5Xi/APeLb6BRR1DcaTdLgxUYkK2lTzRvVK8faZIw+eWS8DR3/sH/irVPHodjzPCEPQH3lWDK5tzryb8f1vM0BvyycgAEAXI/Jdwl client'
+        env_ttl_hours:
+            description: 'Environment TTL in hours'
+            required: true
+            default: '2'
+        pr_number:
+            description: 'PR number'
+            required: false
+
+env:
+  CLIENT_NAME: "nredisstack"
+  CLIENT_BRANCH: ${{ inputs.branch || 'main' }}
+  CLIENT_REPO: ${{ inputs.repo || 'redis/nredisstack' }}
+  RS_VERSION: ${{ inputs.rs_version || '100.0.0' }}
+  RS_BUILD: ${{ inputs.rs_build || 'latest' }}
+  PUBLIC_SSH_KEY: ${{ inputs.public_ssh_key || 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5qa+eD1txZGnJvnk4tgdMrl7IAZsd0jk1kxWzIhPpT8cAOwVJvBh588VV+a1WLFsqjNkNXHiK6z/7mF51GgvM97HppFg7psf2TEUPeBTsZAVJNG96llXSdbZqIc+Bha/q3+OAMWzeouDABzUM7FEmy6Qhl+FgQ24LeuQmZdN6IsSf2pyPrr32qhhdx2qJKUyoqL1YF9q8qpNIXCQaBR/CZx4jR2vk8oHfYJ4s0DNTlpFzdjOn5Xi/APeLb6BRR1DcaTdLgxUYkK2lTzRvVK8faZIw+eWS8DR3/sH/irVPHodjzPCEPQH3lWDK5tzryb8f1vM0BvyycgAEAXI/Jdwl client' }}
+  ENV_TTL_HOURS: ${{ inputs.env_ttl_hours || '2' }}
+  PR_NUMBER: ${{ inputs.pr_number || '' }}
+
+jobs:
+  enterprise-tests:
+    name: Redis Enterprise env0
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Test Infra
+        uses: ./.github/actions/setup-test-infra
+        with:
+          env0_api_key: ${{ secrets.ENV0_API_KEY }}
+          env0_api_key_secret: ${{ secrets.ENV0_API_KEY_SECRET }}
+          env0_project_id: ${{ secrets.ENV0_PROJECT_ID }}
+          env0_template_id: "210534bd-5e41-4452-a7f4-fac68d96f193" # Azure single cluster
+          re_env0_bdb_config: "configs/nredisstack_bdbs.json"
+          re_env0_endpoint_format: "host:port"
+            
+      - name: Enable EntraID
+        uses: fjogeleit/http-request-action@v1  
+        with:
+          url: "http://127.0.0.1:20324/action"
+          method: "POST"
+          headers: |
+            Content-Type: application/json
+          data: '{"type": "enable_entraid", "parameters": {}}'
+
+      - name: Export cluster name
+        run: |
+          echo "CLUSTER_NAME=$(jq -r '.cluster_name.value' env_output.json)" >> $GITHUB_ENV
+          echo $CLUSTER_NAME
+
+      - name: Create User
+        uses: fjogeleit/http-request-action@v1      
+        with:
+          url: https://${{ env.CLUSTER_NAME }}:9443/v1/users
+          method: POST
+          headers: |
+            Content-Type: application/json
+          username: test@redis.com
+          password: test123
+          data: '{"name":"d686f08d-7b3c-4de6-bfee-1165934d3fb0","auth_method":"entraid","role_uids":[2],"email":"d686f08d-7b3c-4de6-bfee-1165934d3fb0@entra.id"}'
+
+      - name: Clone client
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.CLIENT_REPO }}
+          ref: ${{ env.CLIENT_BRANCH }}
+          path: client_src
+
+      - name: Set env variables for tests
+        run: |
+          echo "REDIS_ENDPOINTS_CONFIG_PATH=$(pwd)/endpoints.json" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Dump env variables
+        run: |
+          echo "${REDIS_ENDPOINTS_CONFIG_PATH}"
+          cat "${REDIS_ENDPOINTS_CONFIG_PATH}"
+        shell: bash
+
+      - name: .NET Core 8
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        working-directory: client_src
+        run: dotnet restore
+
+      - name: Build
+        working-directory: client_src
+        run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true
+
+      - name: Test
+        working-directory: client_src
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        run: dotnet test -f net8.0 --no-build --verbosity detailed --filter AuthenticationTests
