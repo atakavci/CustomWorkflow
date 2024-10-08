@@ -62,7 +62,7 @@ jobs:
 
       - name: List of Tests
         working-directory: client_src
-        run: dotnet test -f net8.0 --no-build --list-tests
+        run: dotnet test -f net8.0 --no-build --list-tests tests/Test.proj 
         
      #- name: Test
      #   working-directory: client_src
