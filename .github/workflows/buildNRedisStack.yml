@@ -21,6 +21,7 @@ jobs:
       - name: Copy file to working directory
         run: |
           cp config/endpoints.json $(pwd)/endpoints.json
+          cp config/env_output.json $(pwd)/env_output.json
         shell: bash
 
       - name: Export service url
@@ -30,11 +31,12 @@ jobs:
           BASE_NAME=${DNS_NAME#*.}
           echo $BASE_NAME
           echo "SERVICE_URL=$BASE_NAME" >> $GITHUB_ENV
+          echo "CLUSTER_NAME=$(jq -r '.cluster_name.value' env_output.json)" >> $GITHUB_ENV 
           
       - name: Create User
         uses: fjogeleit/http-request-action@v1      
         with:
-          url: https://${{ env.SERVICE_URL }}:9443/v1/users
+          url: https://${{ env.CLUSTER_NAME }}:9443/v1/users
           method: POST
           headers: |
             Content-Type: application/json
