@@ -28,9 +28,10 @@ jobs:
           DNS_NAME=$(jq -r '.["standalone-entraid-acl"].raw_endpoints[0].dns_name' config/endpoints.json)
           PORT=9443
           # Drop the prefix until the first dot
-          BASE_NAME=${DNS_NAME%%.*}
+          BASE_NAME=${DNS_NAME#*.}
           # Combine with port using colon
           RESULT="${BASE_NAME}:${PORT}"
+          echo $RESULT
           echo "SERVICE_URL=$RESULT" >> $GITHUB_ENV
           
       - name: Create User
