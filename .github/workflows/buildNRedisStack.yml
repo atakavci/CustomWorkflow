@@ -40,7 +40,7 @@ jobs:
             Content-Type: application/json
           username: test@redis.com
           password: test123
-          body: '{"name":"d686f08d-7b3c-4de6-bfee-1165934d3fb0","auth_method":"entraid","role_uids":[2],"email":"d686f08d-7b3c-4de6-bfee-1165934d3fb0@entra.id"}'
+          data: '{"name":"d686f08d-7b3c-4de6-bfee-1165934d3fb0","auth_method":"entraid","role_uids":[2],"email":"d686f08d-7b3c-4de6-bfee-1165934d3fb0@entra.id"}'
         
       - name: Set env variables for tests
         run: |
