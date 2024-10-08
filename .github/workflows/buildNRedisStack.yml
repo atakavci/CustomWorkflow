@@ -39,6 +39,19 @@ jobs:
         with:
           dotnet-version: 8
 
+      - name: Tweak target frameworks
+        working-directory: client_src
+        run: |
+          find . -name '*.csproj' | xargs -I {} sed -E -i 's|<TargetFrameworks(.*)>.*</TargetFrameworks>|<TargetFramework\1>${{inputs.clr_version}}</TargetFramework>|' {}
+          find . -name '*.csproj' | xargs cat
+          jq -n --arg version ${{inputs.dotnet_sdk_version}} '{"sdk":{"version":$version,"rollForward":"latestMinor"}}' > global.json
+      - name: Check .NET version
+        run: dotnet --version
+      - name: Check .NET SDKs
+        run: dotnet --list-sdks
+      - name: Check .NET runtimes
+        run: dotnet --list-runtimes
+
       - name: Restore dependencies
         working-directory: client_src
         run: dotnet restore
