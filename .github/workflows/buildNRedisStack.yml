@@ -34,8 +34,7 @@ jobs:
           echo "SERVICE_URL=$RESULT" >> $GITHUB_ENV
           
       - name: Create User
-        uses: actions/http-client@v1
-        id: http_request
+        uses: fjogeleit/http-request-action@v1      
         with:
           url: https://${SERVICE_URL}:9443/v1/users
           method: POST
