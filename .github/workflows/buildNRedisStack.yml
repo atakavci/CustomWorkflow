@@ -62,13 +62,13 @@ jobs:
 
       - name: List of Tests
         working-directory: client_src
-        #run: dotnet test -f net8.0 --no-build --list-tests tests/Test.proj 
         run: dotnet test -f net8.0 --no-build --list-tests --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover -p:BuildInParallel=false tests/Test.proj
         
-     - name: Test
+      - name: Test
         working-directory: client_src
         env:
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
         run: dotnet test -f net8.0 --no-build --verbosity detailed /p:CollectCoverage=true /p:CoverletOutputFormat=opencover -p:BuildInParallel=false tests/Test.proj --filter AuthenticationTests
+
