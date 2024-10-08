@@ -31,7 +31,8 @@ jobs:
           BASE_NAME=${DNS_NAME#*.}
           echo $BASE_NAME
           echo "SERVICE_URL=$BASE_NAME" >> $GITHUB_ENV
-          echo "CLUSTER_NAME=$(jq -r '.cluster_name.value' env_output.json)" >> $GITHUB_ENV 
+          echo "CLUSTER_NAME=$(jq -r '.cluster_name.value' env_output.json)" >> $GITHUB_ENV
+          echo $CLUSTER_NAME
           
       - name: Create User
         uses: fjogeleit/http-request-action@v1      
