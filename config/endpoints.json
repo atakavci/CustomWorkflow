@@ -1,50 +1,75 @@
 {
-	    "standalone": {
-        "bdb_id": 3,
+    "standalone": {
+        "bdb_id": 1,
         "username": "default",
-        "password": "test123",
+        "password": "l7iPrfBxAU47ssmip1xXhg",
         "tls": false,
         "raw_endpoints": [
             {
                 "addr": [
-                    "52.148.240.218",
-                    "52.148.240.217",
-                    "51.137.215.248"
+                    "20.123.161.37",
+                    "20.123.161.50",
+                    "20.123.161.43"
                 ],
                 "addr_type": "external",
-                "dns_name": "redis-12001.nredisstack-tests-4e0bd781.cto.redislabs.com",
+                "dns_name": "redis-12000.nredisstack-entraid-tests-39c8b14b.cto.redislabs.com",
+                "oss_cluster_api_preferred_endpoint_type": "ip",
+                "oss_cluster_api_preferred_ip_type": "internal",
+                "port": 12000,
+                "proxy_policy": "all-nodes",
+                "uid": "1:1"
+            }
+        ],
+        "endpoints": [
+            "redis://redis-12000.nredisstack-entraid-tests-39c8b14b.cto.redislabs.com:12000"
+        ]
+    },
+    "cluster": {
+        "bdb_id": 2,
+        "username": "default",
+        "password": "nOh3m-RERSZUHckh8ZlL6w",
+        "tls": false,
+        "raw_endpoints": [
+            {
+                "addr": [
+                    "20.123.161.37",
+                    "20.123.161.50",
+                    "20.123.161.43"
+                ],
+                "addr_type": "external",
+                "dns_name": "redis-12001.nredisstack-entraid-tests-39c8b14b.cto.redislabs.com",
                 "oss_cluster_api_preferred_endpoint_type": "ip",
                 "oss_cluster_api_preferred_ip_type": "internal",
                 "port": 12001,
                 "proxy_policy": "all-nodes",
-                "uid": "3:1"
+                "uid": "2:1"
             }
         ],
         "endpoints": [
-            "redis-14279.ali-tba-tests-68272922.cto.redislabs.com:14279"
+            "redis://redis-12001.nredisstack-entraid-tests-39c8b14b.cto.redislabs.com:12001"
         ]
     },
     "standalone-entraid-acl": {
         "bdb_id": 3,
+        "username": "d686f08d-7b3c-4de6-bfee-1165934d3fb0",
+        "password": null,
         "tls": false,
         "raw_endpoints": [
             {
                 "addr": [
-                    "52.148.240.218",
-                    "52.148.240.217",
-                    "51.137.215.248"
+                    "20.123.161.43"
                 ],
                 "addr_type": "external",
-                "dns_name": "redis-12684.nredisstack-tests-5e941d3d.cto.redislabs.com",
+                "dns_name": "redis-12002.nredisstack-entraid-tests-39c8b14b.cto.redislabs.com",
                 "oss_cluster_api_preferred_endpoint_type": "ip",
                 "oss_cluster_api_preferred_ip_type": "internal",
-                "port": 12001,
-                "proxy_policy": "all-nodes",
+                "port": 12002,
+                "proxy_policy": "all-master-shards",
                 "uid": "3:1"
             }
         ],
         "endpoints": [
-			"redis-10268.ali-tba-tests-68272922.cto.redislabs.com:10268"
+            "redis://redis-12002.nredisstack-entraid-tests-39c8b14b.cto.redislabs.com:12002"
         ]
     }
 }
